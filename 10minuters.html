@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Income Tracker</title>
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiSW5jb21lIFRyYWNrZXIiLCJzaG9ydF9uYW1lIjoiSW5jb21lIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNGQkY3RjAiLCJ0aGVtZV9jb2xvciI6IiMxQjREM0UiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhkcFpIUm9QU0kxTVRJaUlHaGxhV2RvZEQwaU5URXlJaUIyYVdWM1FtOTRQU0l3SURBZ05URXlJRFV4TWlJK0NqeHlaV04wSUhkcFpIUm9QU0kxTVRJaUlHaGxhV2RvZEQwaU5URXlJaUJ5ZUQwaU9UWWlJR1pwYkd3OUlpTXhRalJFTTBVaUx6NEtQSFJsZUhRZ2VEMGlNalUySWlCNVBTSXpNakFpSUdadmJuUXRjMmw2WlQwaU16QXdJaUIwWlhoMExXRnVZMmh2Y2owaWJXbGtaR3hsSWo3d241Q3ZQQzkwWlhoMFBnbzhMM04yWno0SyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQo=">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iOTYiIGZpbGw9IiMxQjREM0UiLz4KPHRleHQgeD0iMjU2IiB5PSIzMjAiIGZvbnQtc2l6ZT0iMzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5CvPC90ZXh0Pgo8L3N2Zz4K">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iOTYiIGZpbGw9IiMxQjREM0UiLz4KPHRleHQgeD0iMjU2IiB5PSIzMjAiIGZvbnQtc2l6ZT0iMzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5CvPC90ZXh0Pgo8L3N2Zz4K">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Income Tracker">
+<meta name="theme-color" content="#1B4D3E">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --bg: #F6F4EF;
+    --card: #FFFFFF;
+    --green: #1B4D3E;
+    --green-light: #E3EEE9;
+    --gold: #D9A440;
+    --gold-light: #FAF1DD;
+    --red: #C0463C;
+    --red-light: #FBEAE8;
+    --text: #25241F;
+    --muted: #8C887F;
+    --border: #E9E4D9;
+    --shadow: 0 1px 2px rgba(27,77,62,0.04), 0 2px 12px rgba(27,77,62,0.05);
+  }
+  * { box-sizing: border-box; }
+  body{
+    margin:0;
+    font-family: 'Inter', -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0 16px 60px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .num{ font-family: 'IBM Plex Mono', "Courier New", monospace; }
+
+  .header{
+    margin: 0 -16px 20px;
+    padding: 28px 16px 22px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 0 0 20px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-icon{
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .header h1{ font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .header .date{ font-size: 13px; color: rgba(255,255,255,0.7); margin: 2px 0 0; }
+
+  .wrap{ max-width: 480px; margin: 0 auto; }
+
+  .card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  .eyebrow{
+    font-size: 11px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 0 0 6px;
+  }
+  .balance-label{ font-size: 13px; color: var(--muted); margin-bottom: 2px; }
+  .balance{
+    font-family: 'IBM Plex Mono', "Courier New", monospace;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: -0.01em;
+  }
+  .balance small{ font-size: 15px; font-weight: 500; color: var(--muted); }
+
+  .status-row{ display:flex; align-items:center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+  .status-pill{
+    display:inline-flex; align-items:center; gap: 6px;
+    font-size: 12px; font-weight: 600;
+    padding: 5px 12px; border-radius: 20px;
+    white-space: nowrap;
+  }
+  .status-pill.met{ background: var(--green-light); color: var(--green); }
+  .status-pill.short{ background: var(--red-light); color: var(--red); }
+  .status-pill .dot{ width:6px; height:6px; border-radius:50%; display:inline-block; }
+  .status-pill.met .dot{ background: var(--green); }
+  .status-pill.short .dot{ background: var(--red); }
+
+  .progress-track{
+    height: 8px;
+    background: var(--green-light);
+    border-radius: 4px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .progress-fill{
+    height: 100%;
+    background: var(--green);
+    border-radius: 4px;
+    transition: width 0.3s ease, background 0.3s ease;
+    width: 0%;
+  }
+  .progress-fill.behind{ background: var(--gold); }
+  .progress-text{ font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  .grid-title{ font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .ticks-grid{
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
+  }
+  .tick-cell{
+    aspect-ratio: 1;
+    border-radius: 4px;
+    background: var(--green-light);
+    border: 1px solid var(--border);
+  }
+  .tick-cell.filled{ background: var(--green); border-color: var(--green); }
+
+  .tick-btn{
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--green);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 14px;
+    transition: opacity 0.15s ease;
+  }
+  .tick-btn:active{ opacity: 0.85; }
+  .tick-btn:disabled{ background: var(--muted); cursor: not-allowed; }
+
+  .row{ display:flex; gap: 10px; }
+  .row .card{ flex: 1; }
+
+  label{ font-size: 12px; color: var(--muted); display:block; margin-bottom: 6px; font-weight: 500; }
+  input[type=number]{
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'IBM Plex Mono', "Courier New", monospace;
+    background: var(--bg);
+    color: var(--text);
+  }
+  input[type=number]:focus{ outline: 2px solid var(--green-light); border-color: var(--green); }
+
+  .log-list{ list-style:none; margin:0; padding:0; max-height: 180px; overflow-y:auto; }
+  .log-list li{
+    display:flex; justify-content: space-between;
+    font-size: 14px; padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .log-list li:last-child{ border-bottom:none; }
+  .empty{ font-size: 13px; color: var(--muted); text-align:center; padding: 16px 0; }
+
+  .history-item{
+    display:flex; justify-content: space-between; align-items:center;
+    font-size: 14px; padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-item:last-child{ border-bottom: none; }
+  .history-amt{ font-weight:600; color: var(--green); }
+  .history-date{ color: var(--text); font-weight: 500; }
+  .history-sub{ font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .history-goal{ font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .goal-met{ background: var(--green-light); color: var(--green); }
+  .goal-not{ background: var(--red-light); color: var(--red); }
+
+  .undo-btn, .reset-btn{
+    width:100%;
+    padding: 11px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--muted);
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .undo-btn:disabled{ opacity: 0.5; cursor: not-allowed; }
+  .footer-note{ font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 12px; text-align:left; }
+  .section-title{ font-size: 15px; font-weight: 600; margin: 0 0 14px; }
+  .status{ font-size:12px; color: var(--muted); text-align:center; margin-top:10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-icon">🐯</div>
+    <div>
+      <h1>Income tracker</h1>
+      <p class="date" id="todayDate"></p>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center; padding: 16px;">
+    <div class="eyebrow">Current time</div>
+    <div class="balance" id="clock" style="font-size: 30px;">00:00:00</div>
+    <div class="progress-text" id="nextTickText" style="margin-top:8px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Today's balance</div>
+    <div class="status-row">
+      <div class="balance"><span id="balance">0</span> <small>RWF</small></div>
+      <span class="status-pill" id="goalStatus"><span class="dot"></span><span id="goalStatusText"></span></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">Goal: 0 RWF</div>
+  </div>
+
+  <div class="card">
+    <div class="grid-title">Today's 10-minute blocks (<span id="tickCount">0</span> of <span id="blockCount">60</span>)</div>
+    <div class="ticks-grid" id="ticksGrid"></div>
+    <button class="tick-btn" id="tickBtn">Tick: +<span id="tickAmountLabel">200</span> RWF</button>
+    <button class="undo-btn" id="undoBtn">Undo last tick</button>
+  </div>
+
+  <div class="row">
+    <div class="card">
+      <label for="tickAmount">Amount per tick (RWF)</label>
+      <input type="number" id="tickAmount" min="1" step="1" value="200">
+    </div>
+    <div class="card">
+      <label for="goalAmount">Daily goal (RWF)</label>
+      <input type="number" id="goalAmount" min="1" step="1" value="12000">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Overall balance &amp; savings plan</div>
+    <div class="eyebrow">Total earned so far (all days)</div>
+    <div class="balance" id="totalAll" style="font-size: 28px;">0 <small>RWF</small></div>
+
+    <div style="margin-top: 14px;">
+      <label for="savePct">Save this % of every RWF you earn</label>
+      <input type="number" id="savePct" min="0" max="100" step="1" value="20">
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+      <div class="card" style="background: var(--green-light); border: none; margin-bottom:0;">
+        <div class="balance-label">Put aside (savings)</div>
+        <div class="balance" id="saveAmount" style="font-size: 20px; color: var(--green);">0</div>
+      </div>
+      <div class="card" style="background: var(--gold-light); border: none; margin-bottom:0;">
+        <div class="balance-label">Free to use / reinvest</div>
+        <div class="balance" id="spendAmount" style="font-size: 20px; color: #8A6116;">0</div>
+      </div>
+    </div>
+    <div class="footer-note" style="margin-top:10px; text-align:left;">
+      Tip: many small business owners save 10-30% of everything they earn before spending the rest on stock, transport, or personal needs.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Today's entries</div>
+    <ul class="log-list" id="logList"></ul>
+  </div>
+
+  <div class="card">
+    <div class="section-title">History</div>
+    <div id="historyList"></div>
+    <button class="reset-btn" id="resetBtn">Start a new day now</button>
+  </div>
+
+  <p class="status" id="status"></p>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function todayKey(d = new Date()){
+  return d.toISOString().slice(0,10);
+}
+function formatNum(n){
+  return Math.round(n).toLocaleString('en-US');
+}
+function formatTime(iso){
+  const d = new Date(iso);
+  return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+let state = {
+  settings: { tickAmount: 200, goal: 12000, savePct: 20 },
+  today: { date: todayKey(), entries: [] },
+  history: []
+};
+
+async function loadState(){
+  try{
+    const s = await window.storage.get('settings');
+    if(s && s.value) state.settings = JSON.parse(s.value);
+  }catch(e){}
+  if(state.settings.savePct === undefined) state.settings.savePct = 20;
+  try{
+    const t = await window.storage.get('today');
+    if(t && t.value) state.today = JSON.parse(t.value);
+  }catch(e){}
+  try{
+    const h = await window.storage.get('history');
+    if(h && h.value) state.history = JSON.parse(h.value);
+  }catch(e){}
+
+  // If stored "today" is from a previous day, archive it and start fresh
+  const nowKey = todayKey();
+  if(state.today.date !== nowKey){
+    if(state.today.entries.length > 0){
+      const total = state.today.entries.reduce((a,e)=>a+e.amount,0);
+      state.history.unshift({ date: state.today.date, total, goal: state.settings.goal });
+      await saveHistory();
+    }
+    state.today = { date: nowKey, entries: [] };
+    await saveToday();
+  }
+}
+
+async function saveSettings(){
+  try{ await window.storage.set('settings', JSON.stringify(state.settings)); }
+  catch(e){ setStatus('Could not save settings'); }
+}
+async function saveToday(){
+  try{ await window.storage.set('today', JSON.stringify(state.today)); }
+  catch(e){ setStatus("Could not save today's data"); }
+}
+async function saveHistory(){
+  try{ await window.storage.set('history', JSON.stringify(state.history)); }
+  catch(e){ setStatus('Could not save history'); }
+}
+
+function setStatus(msg){
+  $('status').textContent = msg;
+  if(msg) setTimeout(()=>{ if($('status').textContent === msg) $('status').textContent = ''; }, 2500);
+}
+
+function render(){
+  $('todayDate').textContent = new Date().toLocaleDateString([], { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  const total = state.today.entries.reduce((a,e)=>a+e.amount,0);
+  $('balance').textContent = formatNum(total);
+
+  const goal = state.settings.goal || 1;
+  const pct = Math.min(100, (total/goal)*100);
+  const fillEl = $('progressFill');
+  const goalMet = total >= goal;
+  fillEl.style.width = pct + '%';
+  fillEl.classList.toggle('behind', !goalMet);
+
+  $('progressText').textContent =
+    goalMet
+      ? formatNum(total) + ' / ' + formatNum(goal) + ' RWF — target reached'
+      : formatNum(total) + ' / ' + formatNum(goal) + ' RWF (' + Math.round(pct) + '%)';
+
+  const statusEl = $('goalStatus');
+  const statusTextEl = $('goalStatusText');
+  if(goalMet){
+    statusEl.className = 'status-pill met';
+    const over = total - goal;
+    statusTextEl.textContent = over > 0 ? 'Goal met, +' + formatNum(over) + ' RWF' : 'Goal met';
+  } else {
+    statusEl.className = 'status-pill short';
+    statusTextEl.textContent = formatNum(goal - total) + ' RWF to go';
+  }
+
+  $('tickAmountLabel').textContent = formatNum(state.settings.tickAmount);
+  $('tickAmount').value = state.settings.tickAmount;
+  $('goalAmount').value = state.settings.goal;
+
+  // Grid: number of blocks needed to reach the goal at current tick amount
+  const blockCount = Math.max(state.today.entries.length, Math.ceil(goal / state.settings.tickAmount), 1);
+  $('blockCount').textContent = blockCount;
+  $('tickCount').textContent = state.today.entries.length;
+
+  const grid = $('ticksGrid');
+  grid.innerHTML = '';
+  for(let i=0;i<blockCount;i++){
+    const cell = document.createElement('div');
+    cell.className = 'tick-cell' + (i < state.today.entries.length ? ' filled' : '');
+    grid.appendChild(cell);
+  }
+
+  // Log list
+  const logList = $('logList');
+  if(state.today.entries.length === 0){
+    logList.innerHTML = '<li class="empty">No entries yet. Tap "Tick" after each 10-minute block.</li>';
+  } else {
+    logList.innerHTML = '';
+    state.today.entries.slice().reverse().forEach((e, idx) => {
+      const li = document.createElement('li');
+      const num = state.today.entries.length - idx;
+      li.innerHTML = '<span>#' + num + '  ' + formatTime(e.time) + '</span><span>+' + formatNum(e.amount) + ' RWF</span>';
+      logList.appendChild(li);
+    });
+  }
+
+  // History
+  const historyList = $('historyList');
+  if(state.history.length === 0){
+    historyList.innerHTML = '<div class="empty">No past days recorded yet.</div>';
+  } else {
+    historyList.innerHTML = '';
+    state.history.slice(0,30).forEach(h => {
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      const met = h.total >= h.goal;
+      const diff = h.total - h.goal;
+      const subText = met
+        ? (diff > 0 ? '+' + formatNum(diff) + ' RWF over target' : 'Exactly on target')
+        : formatNum(-diff) + ' RWF short of target';
+      div.innerHTML =
+        '<div><div class="history-date">' + h.date + '</div><div class="history-sub">' + subText + '</div></div>' +
+        '<span style="display:flex; align-items:center; gap:8px;">' +
+          '<span class="history-amt num">' + formatNum(h.total) + ' RWF</span>' +
+          '<span class="history-goal ' + (met ? 'goal-met' : 'goal-not') + '">' + (met ? 'Goal met' : 'Below goal') + '</span>' +
+        '</span>';
+      historyList.appendChild(div);
+    });
+  }
+
+  $('undoBtn').disabled = state.today.entries.length === 0;
+
+  // Overall total and savings split
+  const historyTotal = state.history.reduce((a,h)=>a+h.total,0);
+  const grandTotal = historyTotal + total;
+  $('totalAll').innerHTML = formatNum(grandTotal) + ' <small>RWF</small>';
+
+  $('savePct').value = state.settings.savePct;
+  const saveAmt = grandTotal * (state.settings.savePct/100);
+  const spendAmt = grandTotal - saveAmt;
+  $('saveAmount').textContent = formatNum(saveAmt);
+  $('spendAmount').textContent = formatNum(spendAmt);
+}
+
+async function handleTick(){
+  state.today.entries.push({ time: new Date().toISOString(), amount: state.settings.tickAmount });
+  await saveToday();
+  render();
+}
+
+async function handleUndo(){
+  if(state.today.entries.length === 0) return;
+  state.today.entries.pop();
+  await saveToday();
+  render();
+}
+
+async function handleResetDay(){
+  const total = state.today.entries.reduce((a,e)=>a+e.amount,0);
+  if(state.today.entries.length > 0){
+    state.history.unshift({ date: state.today.date, total, goal: state.settings.goal });
+    await saveHistory();
+  }
+  state.today = { date: todayKey(), entries: [] };
+  await saveToday();
+  render();
+  setStatus('New day started');
+}
+
+$('tickBtn').addEventListener('click', handleTick);
+$('undoBtn').addEventListener('click', handleUndo);
+$('resetBtn').addEventListener('click', handleResetDay);
+
+$('tickAmount').addEventListener('input', async (e) => {
+  const v = parseInt(e.target.value, 10);
+  state.settings.tickAmount = (isNaN(v) || v < 1) ? 1 : v;
+  await saveSettings();
+  render();
+});
+$('goalAmount').addEventListener('input', async (e) => {
+  const v = parseInt(e.target.value, 10);
+  state.settings.goal = (isNaN(v) || v < 1) ? 1 : v;
+  await saveSettings();
+  render();
+});
+$('savePct').addEventListener('input', async (e) => {
+  let v = parseInt(e.target.value, 10);
+  if(isNaN(v)) v = 0;
+  if(v < 0) v = 0;
+  if(v > 100) v = 100;
+  state.settings.savePct = v;
+  await saveSettings();
+  render();
+});
+
+function updateClock(){
+  const now = new Date();
+  $('clock').textContent = now.toLocaleTimeString([], { hour12: false });
+
+  const entries = state.today.entries;
+  const nextTickEl = $('nextTickText');
+  if(entries.length === 0){
+    nextTickEl.textContent = 'No ticks yet today';
+  } else {
+    const last = new Date(entries[entries.length-1].time);
+    const next = new Date(last.getTime() + 10*60*1000);
+    const diffMs = next - now;
+    if(diffMs <= 0){
+      nextTickEl.textContent = 'Next tick is due now';
+    } else {
+      const mins = Math.floor(diffMs/60000);
+      const secs = Math.floor((diffMs%60000)/1000);
+      nextTickEl.textContent = 'Next tick due in ' + mins + 'm ' + secs + 's (at ' + next.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + ')';
+    }
+  }
+}
+
+(async function init(){
+  await loadState();
+  render();
+  updateClock();
+  setInterval(updateClock, 1000);
+})();
+</script>
+</body>
+</html>
